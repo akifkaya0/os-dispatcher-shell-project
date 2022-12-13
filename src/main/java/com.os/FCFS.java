@@ -1,4 +1,6 @@
 package src.main.java.com.os;
 
-public class FCFS {
+import src.main.java.com.os.interfaces.IFCFS;
+
+public class FCFS implements IFCFS {
 }
