@@ -1,27 +1,33 @@
 package src.main.java.com.os;
 
 import src.main.java.com.os.interfaces.IDispatcher;
+import src.main.java.com.os.interfaces.IFCFS;
+import src.main.java.com.os.interfaces.IJobDispatchList;
+import src.main.java.com.os.interfaces.IMultiLevelFeedbackQueue;
 
-import java.util.LinkedList;
-import java.util.Queue;
+
 
 public class Dispatcher implements IDispatcher {
-    Queue<Proses> gercekZamanlıKuyruk = new LinkedList<>();
-    Queue<Proses> kullanıcıProsesKuyruk = new LinkedList<>();
 
+    IFCFS FCFSQueue = new FCFS();
+    IMultiLevelFeedbackQueue multilevelFeedbackQueue = new MultilevelFeedbackQueue();
 
-    JobDispatchList jobDispatchList;
-    public Dispatcher(JobDispatchList jobDispatchList) {
+    IJobDispatchList jobDispatchList;
+
+    public Dispatcher(IJobDispatchList jobDispatchList) {
         this.jobDispatchList=jobDispatchList;
     }
+
     public void yerlestir(){
-        for (Proses jobDispatchList1 : jobDispatchList.proses) {
-            if(jobDispatchList1.getOncelik()==0){
-                gercekZamanlıKuyruk.add(jobDispatchList1);
+
+        for (Proses proses : jobDispatchList.getProsesList()) {
+            if(proses.getOncelik()==0){
+                FCFSQueue.addProses(proses);
             }
             else
-                kullanıcıProsesKuyruk.add(jobDispatchList1);
+                multilevelFeedbackQueue.addProses(proses);
         }
+
     }
 
 
