@@ -6,5 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JobDispatchList implements IJobDispatchList {
-    List<Process> processes=new ArrayList<>();
+    public List<Proses> proses =new ArrayList<>();
+
+
 }
