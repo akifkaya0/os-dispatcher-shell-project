@@ -3,16 +3,16 @@ package src.main.java.com.os;
 import src.main.java.com.os.interfaces.IUserJobQueue;
 
 import java.util.LinkedList;
+import java.util.Queue;
 
 public class UserJobQueue implements IUserJobQueue {
 
-    private LinkedList<Proses>[] userJobQueue = new LinkedList[3];
-
+    private Queue<Proses> userJobQueue = new LinkedList<Proses>();
 
     @Override
     public void addProses(Proses proses) {
 
-        userJobQueue[proses.getOncelik() - 1].add(proses);
+        userJobQueue.add(proses);
 
     }
 
