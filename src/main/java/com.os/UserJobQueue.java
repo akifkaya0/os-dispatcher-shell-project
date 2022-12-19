@@ -16,7 +16,27 @@ public class UserJobQueue implements IUserJobQueue {
 
     }
 
+    @Override
+    public void printQueue() {
+
+        System.out.println("user job queue yazdiriliyor...");
 
 
+        for (Proses proses : userJobQueue) {
+
+            System.out.print(" |  oncelik      : " + proses.getOncelik());
+
+
+        }
+
+        System.out.println("");
+
+        for (Proses proses : userJobQueue) {
+
+            System.out.print(" |  varis zamani : " + proses.getVarisZamani());
+
+        }
+
+    }
 
 }
