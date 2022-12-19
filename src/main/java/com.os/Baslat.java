@@ -1,9 +1,9 @@
 package src.main.java.com.os;
 import src.main.java.com.os.interfaces.IReader;
-
 import java.io.IOException;
 
-public class main {
+
+public class Baslat {
 
     public static void main(String[] args) throws IOException {
 
@@ -22,6 +22,7 @@ public class main {
         Dispatcher dispatcher = new Dispatcher(jobDispatchList);
         dispatcher.yerlestir();
 
-    }
 
+
+        }
 }

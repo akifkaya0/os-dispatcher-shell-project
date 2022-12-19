@@ -1,16 +1,17 @@
 package src.main.java.com.os;
 
 import src.main.java.com.os.interfaces.IDispatcher;
-import src.main.java.com.os.interfaces.IFCFS;
 import src.main.java.com.os.interfaces.IJobDispatchList;
-import src.main.java.com.os.interfaces.IMultiLevelFeedbackQueue;
 
+
+import java.util.LinkedList;
+import java.util.Queue;
 
 
 public class Dispatcher implements IDispatcher {
+    private Queue<Proses> realTimeQueue = new LinkedList<>();
+    private Queue<Proses> userJobQueue = new LinkedList<>();
 
-    IFCFS FCFSQueue = new FCFS();
-    IMultiLevelFeedbackQueue multilevelFeedbackQueue = new MultilevelFeedbackQueue();
 
     IJobDispatchList jobDispatchList;
 
@@ -22,13 +23,21 @@ public class Dispatcher implements IDispatcher {
 
         for (Proses proses : jobDispatchList.getProsesList()) {
             if(proses.getOncelik()==0){
-                FCFSQueue.addProses(proses);
+                realTimeQueue.add(proses);
             }
             else
-                multilevelFeedbackQueue.addProses(proses);
+                userJobQueue.add(proses);
         }
 
     }
+    public Queue<Proses> getRealTimeQueue() {
+        return realTimeQueue;
+    }
+
+    public Queue<Proses> getUserJobQueue() {
+        return userJobQueue;
+    }
+
 
 
 }

@@ -3,14 +3,13 @@ package src.main.java.com.os;
 public class Proses {
     private int varisZamani;
     private int oncelik;
-    private int prosesZamanı;
-    public Proses(int varisZamani, int oncelik, int prosesZamanı) {
+    private int prosesZamani;
+    public Proses(int varisZamani, int oncelik, int prosesZamani) {
         this.varisZamani = varisZamani;
         this.oncelik = oncelik;
-        this.prosesZamanı = prosesZamanı;
+        this.prosesZamani = prosesZamani;
+
     }
-
-
 
     public int getVarisZamani() {
         return varisZamani;
@@ -28,11 +27,11 @@ public class Proses {
         this.oncelik = oncelik;
     }
 
-    public int getProsesZamanı() {
-        return prosesZamanı;
+    public int getProsesZamani() {
+        return prosesZamani;
     }
 
-    public void setProsesZamanı(int prosesZamanı) {
-        this.prosesZamanı = prosesZamanı;
+    public void setProsesZamani(int prosesZamani) {
+        this.prosesZamani = prosesZamani;
     }
 }

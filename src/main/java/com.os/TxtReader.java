@@ -14,7 +14,7 @@ public class TxtReader implements IReader {
         JobDispatchList jobDispatchList=new JobDispatchList();
 
         // Dosyanın okunması için oluşturulan FileReader nesnesi
-        FileReader fr = new FileReader("C:\\Users\\Lenovo\\Desktop\\giriş.txt");
+        FileReader fr = new FileReader("D:\\işletim sistemleri 2\\giriş.txt");
         String line;
         BufferedReader br = new BufferedReader(fr);
 
