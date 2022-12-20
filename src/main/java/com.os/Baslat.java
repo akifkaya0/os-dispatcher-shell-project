@@ -5,7 +5,7 @@ import java.io.IOException;
 
 public class Baslat {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
 
         //  Path path = Paths.get(args[0]);
         //  String okunacakDosya = path.toAbsolutePath().toString();
@@ -20,9 +20,7 @@ public class Baslat {
         // okuma fonkisyonundan dönen bu JobDispatchList i içindeki prosesleri uygun kuyruklara yerleştirmesi için
         // dispatcher sınıfının yerlestir fonksiyonu calistirilir.
         Dispatcher dispatcher = new Dispatcher(jobDispatchList);
-        dispatcher.yerlestir();
-
-
+        dispatcher.calistir();
 
         }
 }
