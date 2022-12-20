@@ -11,7 +11,7 @@ public class Proses {
 
 
     private String prosesRenkKodu;
-
+    public int prosesStatus = 0;
 
     public Proses(int prosesId, int varisZamani, int oncelik, int prosesZamani) {
         this.varisZamani = varisZamani;
@@ -19,11 +19,6 @@ public class Proses {
         this.prosesZamani = prosesZamani;
         this.prosesId = prosesId;
         this.prosesRenkKodu = getRandomColor();
-
-        System.out.println("proses nesnesi oluşturuldu");
-
-        printProses(0, "basladi");
-
 
     }
 

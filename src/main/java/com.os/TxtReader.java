@@ -14,7 +14,7 @@ public class TxtReader implements IReader {
         JobDispatchList jobDispatchList=new JobDispatchList();
 
         // Dosyanın okunması için oluşturulan FileReader nesnesi
-        FileReader fr = new FileReader("C:\\Users\\HP\\Desktop\\giriş.txt");
+        FileReader fr = new FileReader("D:\\işletim sistemleri 2\\giriş.txt");
         String line;
         BufferedReader br = new BufferedReader(fr);
         int sayac=0;
@@ -31,7 +31,7 @@ public class TxtReader implements IReader {
 
             // Yeni bir proses nesnesi oluşturulur. Elde edilen veriler proses yapıcı fonksiyonuna gönderilir.
             Proses proses =new Proses(sayac,prosesVarisZamani , prosesOncelik , prosesZamani);
-
+            sayac++;
             // Oluşturulan proses JobDispatchList içerisinde eklenirç
             jobDispatchList.addProcess(proses);
 
