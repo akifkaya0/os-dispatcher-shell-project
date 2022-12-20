@@ -39,4 +39,8 @@ public class UserJobQueue implements IUserJobQueue {
 
     }
 
+    public int getQueueSize(){
+        return userJobQueue.size();
+    }
+
 }

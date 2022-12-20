@@ -6,5 +6,7 @@ public interface IRealTimeQueue {
 
     public void addProses(Proses proses);
     public void printQueue();
+    public int getQueueSize();
+    public void execProses(int dispatcherTimer) throws InterruptedException;
 
 }

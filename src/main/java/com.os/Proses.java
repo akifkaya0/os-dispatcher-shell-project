@@ -46,7 +46,7 @@ public class Proses {
         String processArrivalTime = " kalan süre:" + this.getProsesZamani() + " sn)";
 
 
-        System.out.format("%s %20s  %10s  %10s  %10s \u001B[0m \n", prosesRenkKodu, information, processId, processOncelik, processArrivalTime);
+        System.out.format("%s %20s  %10s  %10s  %10s \u001B[0m \n", this.prosesRenkKodu, information, processId, processOncelik, processArrivalTime);
 
     }
 
