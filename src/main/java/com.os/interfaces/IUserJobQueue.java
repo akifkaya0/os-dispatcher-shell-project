@@ -6,5 +6,5 @@ public interface IUserJobQueue {
 
     public void addProses(Proses proses);
     public void printQueue();
-
+    public int getQueueSize();
 }

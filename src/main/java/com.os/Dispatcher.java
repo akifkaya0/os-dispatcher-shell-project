@@ -27,40 +27,52 @@ public class Dispatcher implements IDispatcher {
     }
 
     public void calistir() throws InterruptedException {
-
         int seconds = 0;
         long startTime = System.currentTimeMillis();
 
         while (true) {
 
-            System.out.println(jobDispatchList.getProsesListSize());
-            if (jobDispatchList.getProsesListSize() == 0) {
-                break;
+            if (jobDispatchList.getProsesListSize() != 0) {
+
+                LinkedList<Proses> prosesList = jobDispatchList.getProsesByArrivalTime(seconds);
+
+                for (Proses proses : prosesList) {
+
+                    if (proses.getOncelik() == 0) {
+                        realTimeQueue.addProses(proses);
+
+                    } else
+                        userJobQueue.addProses(proses);
+                }
+
             }
+
+            // FCFS ÇALIŞTIRILMASI
+
+            if(realTimeQueue.getQueueSize() != 0){
+
+
+                  realTimeQueue.execProses(seconds);
+
+            }
+
+
 
             //System.out.println("program saniyesi : " + seconds);
 
-            LinkedList<Proses> prosesList = jobDispatchList.getProsesByArrivalTime(seconds);
 
-
-            for (Proses proses : prosesList) {
-
-                if (proses.getOncelik() == 0) {
-                    realTimeQueue.addProses(proses);
-
-                } else
-                    userJobQueue.addProses(proses);
-
-            }
 
             //realTimeQueue.printQueue();
             //userJobQueue.printQueue();
-
             Thread.sleep(1000);
-            long endTime = System.currentTimeMillis();
-            long estimatedTime = endTime - startTime; // Geçen süreyi milisaniye cinsinden elde ediyoruz
-            seconds = (int) estimatedTime / 1000; // saniyeye çevirmek için 1000'e bölüyoruz.
 
+
+                long endTime = System.currentTimeMillis();
+                long estimatedTime = endTime - startTime; // Geçen süreyi milisaniye cinsinden elde ediyoruz
+                seconds = (int) estimatedTime / 1000; // saniyeye çevirmek için 1000'e bölüyoruz.
+
+
+            System.out.println("second:  "+seconds);
 
         }
 
