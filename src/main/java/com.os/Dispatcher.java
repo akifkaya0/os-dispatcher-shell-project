@@ -19,7 +19,7 @@ public class Dispatcher implements IDispatcher {
 
     public Dispatcher(IJobDispatchList jobDispatchList) {
 
-        this.jobDispatchList=jobDispatchList;
+        this.jobDispatchList = jobDispatchList;
 
         this.userJobQueue = new UserJobQueue();
         this.realTimeQueue = new RealTimeQueue();
@@ -30,32 +30,41 @@ public class Dispatcher implements IDispatcher {
 
         int seconds = 0;
         long startTime = System.currentTimeMillis();
-        for (Proses proses : jobDispatchList.getProsesList()) {
-            // int konrol=0;
 
-            for (Proses proses2 : jobDispatchList.getProsesList()) {
-                if (proses2.getVarisZamani() == seconds) {
-                    // konrol++;
-                    if (proses.getOncelik() == 0) {
-                        realTimeQueue.addProses(proses);
-                    } else
-                        userJobQueue.addProses(proses);
-                }
+        while (true) {
+
+            System.out.println(jobDispatchList.getProsesListSize());
+            if (jobDispatchList.getProsesListSize() == 0) {
+                break;
             }
-            /*if(realTimeQueue.getSize()>0){
+
+            //System.out.println("program saniyesi : " + seconds);
+
+            LinkedList<Proses> prosesList = jobDispatchList.getProsesByArrivalTime(seconds);
+
+
+            for (Proses proses : prosesList) {
+
+                if (proses.getOncelik() == 0) {
+                    realTimeQueue.addProses(proses);
+
+                } else
+                    userJobQueue.addProses(proses);
 
             }
-            else*/
+
+            //realTimeQueue.printQueue();
+            //userJobQueue.printQueue();
 
             Thread.sleep(1000);
             long endTime = System.currentTimeMillis();
             long estimatedTime = endTime - startTime; // Geçen süreyi milisaniye cinsinden elde ediyoruz
             seconds = (int) estimatedTime / 1000; // saniyeye çevirmek için 1000'e bölüyoruz.
 
-            //  System.out.println(konrol);
+
         }
 
     }
 
 
-    }
+}
