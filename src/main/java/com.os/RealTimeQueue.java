@@ -44,48 +44,13 @@ public class RealTimeQueue implements IRealTimeQueue {
         return realTimeQueue.size();
     }
 
-    public void execProses(int dispatcherTimer) {
+    @Override
+    public Proses getProses() {
+        return realTimeQueue.peek();
+    }
 
-        Proses proses = realTimeQueue.peek();
-
-
-        {
-            if (proses.prosesStatus == 2) {
-                realTimeQueue.remove(proses);
-                proses.printProses(dispatcherTimer, "sonlandi");
-                proses = realTimeQueue.peek();
-            }
-
-            if (proses == null) {
-                return;
-            }
-                if (proses.prosesStatus == 0) {
-
-                    proses.printProses(dispatcherTimer, "basladi");
-
-                    proses.setProsesZamani(proses.getProsesZamani() - 1);
-
-                    if (proses.getProsesZamani() == 0) {
-
-                        proses.prosesStatus = 2;
-                    } else {
-                        proses.prosesStatus = 1;
-                        return;
-                    }
-
-                }
-
-                if (proses.prosesStatus == 1) {
-                    proses.printProses(dispatcherTimer, "yurutuluyor");
-                    proses.setProsesZamani(proses.getProsesZamani() - 1);
-                    if (proses.getProsesZamani() == 0) {
-                        proses.prosesStatus = 2;
-                    } else {
-                        return;
-                    }
-                }
-            }
-
-
+    @Override
+    public void removeProses(Proses proses) {
+        this.realTimeQueue.remove();
     }
 }
