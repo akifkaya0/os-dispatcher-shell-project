@@ -7,6 +7,7 @@ import java.util.Queue;
 
 public class UserJobQueue implements IUserJobQueue {
 
+
     private Queue<Proses> userJobQueue1 = new LinkedList<Proses>();
     private Queue<Proses> userJobQueue2 = new LinkedList<Proses>();
     private Queue<Proses> userJobQueue3 = new LinkedList<Proses>();
@@ -23,6 +24,18 @@ public class UserJobQueue implements IUserJobQueue {
             userJobQueue3.add(proses);
 
     }
+    public Queue<Proses> getUserJobQueue1() {
+        return userJobQueue1;
+    }
+
+    public Queue<Proses> getUserJobQueue2() {
+        return userJobQueue2;
+    }
+
+    public Queue<Proses> getUserJobQueue3() {
+        return userJobQueue3;
+    }
+
 
     @Override
     public void printQueue() {

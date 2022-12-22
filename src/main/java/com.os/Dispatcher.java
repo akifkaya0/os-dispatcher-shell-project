@@ -19,6 +19,7 @@ public class Dispatcher implements IDispatcher {
     IUserJobQueue userJobQueue;
     IRealTimeQueue realTimeQueue;
 
+    Queue<Proses> prosesBaslamaZamani = new LinkedList<>();
     public Dispatcher(IJobDispatchList jobDispatchList) {
 
         this.jobDispatchList = jobDispatchList;
@@ -72,7 +73,24 @@ public class Dispatcher implements IDispatcher {
 
     }
 
+    public void zamanAsimiKontrol(int second) {
+        int kontrol=0;
+        if (!prosesBaslamaZamani.isEmpty()) {
+            for (Proses proses : prosesBaslamaZamani) {
+                if (second - proses.getBaslamaZamani() > 20&&proses.getOncelik()!=0&&proses.getProsesZamani()!=0) {
+                    proses.printProses(second, "Zaman asimi");
+                    userJobQueue.removeProses(proses);
+                    kontrol=1;
+                }
+            }
+            if(kontrol==1){
+                prosesBaslamaZamani.remove();
+            }
+        }
+    }
+
     public void calistir() throws InterruptedException {
+
 
         int seconds = 0;
         long startTime = System.currentTimeMillis();
@@ -84,15 +102,30 @@ public class Dispatcher implements IDispatcher {
         Thread.sleep(100);
 
         while (true) {
-
+            int kontrol=0;
             islenecekProses = this.getProses();
 
             if (islenecekProses == null && this.jobDispatchList.getProsesListSize() == 0) break;
+
+            ///////
+            for (Proses proses : prosesBaslamaZamani) {
+                if (proses.getProsesId()==islenecekProses.getProsesId()) {
+                 kontrol=1;
+                }
+            }
+            if(kontrol==0) {
+                islenecekProses.setBaslamaZamani(seconds);
+                prosesBaslamaZamani.add(islenecekProses);
+            }
+            zamanAsimiKontrol(seconds);
+            //////////
 
             // program ilk prosesi başlattığında ekrana başladı yazdırılır.
             if (islenmisProses == null) {
 
                 islenecekProses.printProses(seconds, "basladi");
+
+
 
             } else {
 
@@ -100,25 +133,19 @@ public class Dispatcher implements IDispatcher {
                 if (islenmisProses.getProsesId() == islenecekProses.getProsesId()) {
                     // aynı ise proses yürütülmeye devam edilir.
                     islenecekProses.printProses(seconds, "yurutuluyor");
-
                 } else {
                     // farklı bir proses çalıştırılmaya başlanmışsa ya proses kesmeye uğramıştır ya da proses bitmiştir yeni bir proses çalıştırılmaya başlanacaktır.
 
                     // prosesi askıya almak için
                     if (islenecekProses.getOncelik() < islenmisProses.getOncelik()) {
-
                         islenmisProses.printProses(seconds, "askıda");
                         islenecekProses.printProses(seconds, "basladi");
 
                     } else {
                         // yeni bir proses başlangıcı belirtmek için
                         islenecekProses.printProses(seconds, "basladi");
-
                     }
-
                 }
-
-
             }
 
             Thread.sleep(1000);
@@ -152,7 +179,6 @@ public class Dispatcher implements IDispatcher {
             }
 
             System.out.println(islenmisProses);
-
         }
 
     }

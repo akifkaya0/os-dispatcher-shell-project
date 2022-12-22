@@ -9,6 +9,15 @@ public class Proses {
     private int oncelik;
     private int prosesZamani;
     private String prosesRenkKodu;
+    private int baslamaZamani;
+
+    public void setBaslamaZamani(int baslamaZamani) {
+        this.baslamaZamani = baslamaZamani;
+    }
+
+    public int getBaslamaZamani() {
+        return baslamaZamani;
+    }
 
 
     public Proses(int prosesId, int varisZamani, int oncelik, int prosesZamani) {
