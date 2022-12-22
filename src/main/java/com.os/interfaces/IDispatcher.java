@@ -5,5 +5,4 @@ import src.main.java.com.os.Proses;
 import java.util.Queue;
 
 public interface IDispatcher {
-    public void zamanAsimiKontrol(int second);
 }

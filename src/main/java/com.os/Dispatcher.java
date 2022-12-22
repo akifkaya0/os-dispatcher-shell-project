@@ -6,6 +6,9 @@ import src.main.java.com.os.interfaces.IRealTimeQueue;
 import src.main.java.com.os.interfaces.IUserJobQueue;
 
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Timer;
@@ -19,7 +22,7 @@ public class Dispatcher implements IDispatcher {
     IUserJobQueue userJobQueue;
     IRealTimeQueue realTimeQueue;
 
-    Queue<Proses> prosesBaslamaZamani = new LinkedList<>();
+
     public Dispatcher(IJobDispatchList jobDispatchList) {
 
         this.jobDispatchList = jobDispatchList;
@@ -73,23 +76,7 @@ public class Dispatcher implements IDispatcher {
 
     }
 
-    public void zamanAsimiKontrol(int second) {
-        int kontrol=0;
-        if (!prosesBaslamaZamani.isEmpty()) {
-            for (Proses proses : prosesBaslamaZamani) {
-                if (second - proses.getBaslamaZamani() > 20&&proses.getOncelik()!=0&&proses.getProsesZamani()!=0) {
-                    proses.printProses(second, "Zaman asimi");
-                    userJobQueue.removeProses(proses);
-                    kontrol=1;
-                }
-            }
-            if(kontrol==1){
-                prosesBaslamaZamani.remove();
-            }
-        }
-    }
-
-    public void calistir() throws InterruptedException {
+    public void calistir() throws InterruptedException, IOException {
 
 
         int seconds = 0;
@@ -102,30 +89,21 @@ public class Dispatcher implements IDispatcher {
         Thread.sleep(100);
 
         while (true) {
-            int kontrol=0;
+
+            //realTimeQueue.printQueue();
+            //userJobQueue.printQueue();
+
             islenecekProses = this.getProses();
 
             if (islenecekProses == null && this.jobDispatchList.getProsesListSize() == 0) break;
 
-            ///////
-            for (Proses proses : prosesBaslamaZamani) {
-                if (proses.getProsesId()==islenecekProses.getProsesId()) {
-                 kontrol=1;
-                }
-            }
-            if(kontrol==0) {
-                islenecekProses.setBaslamaZamani(seconds);
-                prosesBaslamaZamani.add(islenecekProses);
-            }
-            zamanAsimiKontrol(seconds);
-            //////////
+            this.checkIsStartedProcess(islenecekProses, seconds);
 
             // program ilk prosesi başlattığında ekrana başladı yazdırılır.
             if (islenmisProses == null) {
 
-                islenecekProses.printProses(seconds, "basladi");
-
-
+                if (islenecekProses != null)
+                    islenecekProses.printProses(seconds, "basladi");
 
             } else {
 
@@ -133,11 +111,13 @@ public class Dispatcher implements IDispatcher {
                 if (islenmisProses.getProsesId() == islenecekProses.getProsesId()) {
                     // aynı ise proses yürütülmeye devam edilir.
                     islenecekProses.printProses(seconds, "yurutuluyor");
+
                 } else {
                     // farklı bir proses çalıştırılmaya başlanmışsa ya proses kesmeye uğramıştır ya da proses bitmiştir yeni bir proses çalıştırılmaya başlanacaktır.
 
                     // prosesi askıya almak için
-                    if (islenecekProses.getOncelik() < islenmisProses.getOncelik()) {
+                    if (islenecekProses.getOncelik() <= islenmisProses.getOncelik() && islenmisProses.getProsesZamani() != 0) {
+
                         islenmisProses.printProses(seconds, "askıda");
                         islenecekProses.printProses(seconds, "basladi");
 
@@ -152,33 +132,82 @@ public class Dispatcher implements IDispatcher {
 
             islenmisProses = islenecekProses;
             islenecekProses = null;
-            islenmisProses.setProsesZamani(islenmisProses.getProsesZamani() - 1);
 
-            //long endTime = System.currentTimeMillis();
-            //long estimatedTime = endTime - startTime; // Geçen süreyi milisaniye cinsinden elde ediyoruz
-            //seconds = (int) estimatedTime / 1000; // saniyeye çevirmek için 1000'e bölüyoruz.
-            seconds++;
+            if (islenmisProses != null) {
 
-            // 1 sn çalıştırılan proses tamamlandıysa ait olduğu kuyruktan çıkarılır.
-            if (islenmisProses.getProsesZamani() == 0) {
+                islenmisProses.setProsesZamani(islenmisProses.getProsesZamani() - 1);
 
-                if (islenmisProses.getOncelik() == 0)
-                    realTimeQueue.removeProses(islenmisProses);
-                else
-                    userJobQueue.removeProses(islenmisProses);
+                //long endTime = System.currentTimeMillis();
+                //long estimatedTime = endTime - startTime; // Geçen süreyi milisaniye cinsinden elde ediyoruz
+                //seconds = (int) estimatedTime / 1000; // saniyeye çevirmek için 1000'e bölüyoruz.
+                seconds++;
 
-                islenmisProses.printProses(seconds, "sonlandi");
-                continue;
+                // 1 sn çalıştırılan proses tamamlandıysa ait olduğu kuyruktan çıkarılır.
+                if (islenmisProses.getProsesZamani() == 0) {
+
+                    islenmisProses.getTimerObject().cancel();
+
+                    if (islenmisProses.getOncelik() == 0)
+                        realTimeQueue.removeProses(islenmisProses);
+                    else
+                        userJobQueue.removeProses(islenmisProses);
+
+                    islenmisProses.printProses(seconds, "sonlandi");
+                    continue;
+                }
+
+                // 1 sn çalıştırılan proses hala bitmediyse ve önceliği 1 2 veya 3 ise önceliği düşürülüp uygun kuyruğa yerleştirilir.
+                if (islenmisProses.getOncelik() > 0) {
+
+                    userJobQueue.transferProses(islenmisProses);
+
+                }
+
             }
 
-            // 1 sn çalıştırılan proses hala bitmediyse ve önceliği 1 2 veya 3 ise önceliği düşürülüp uygun kuyruğa yerleştirilir.
-            if (islenmisProses.getOncelik() > 0) {
+        }
 
-                userJobQueue.transferProses(islenmisProses);
+    }
 
+    Queue<Proses> startedProcesses = new LinkedList<>();
+
+    private void checkIsStartedProcess(Proses islenecekProses, int dispatcherTime) {
+
+        boolean isHaveProcess = false;
+
+        for (Proses proses : startedProcesses) {
+            if (proses.getProsesId() == islenecekProses.getProsesId()) {
+                isHaveProcess = true;
             }
+        }
+        if (!isHaveProcess) {
 
-            System.out.println(islenmisProses);
+            startedProcesses.add(islenecekProses);
+
+            Timer timer = new Timer();
+
+            islenecekProses.setTimerObject(timer);
+
+            TimerTask gorev = new TimerTask() {
+
+                int time = dispatcherTime;
+
+                @Override
+                public void run() {
+
+                    if (islenecekProses.getOncelik() == 0)
+                        realTimeQueue.removeProses(islenecekProses);
+                    else
+                        userJobQueue.removeProses(islenecekProses);
+
+                    islenecekProses.printProses(time+20, "zaman asimi");
+
+                    timer.cancel();
+                }
+            };
+
+            timer.schedule(gorev, 20000);
+
         }
 
     }

@@ -1,6 +1,7 @@
 package src.main.java.com.os;
 
 import java.util.Random;
+import java.util.Timer;
 
 public class Proses {
 
@@ -9,15 +10,10 @@ public class Proses {
     private int oncelik;
     private int prosesZamani;
     private String prosesRenkKodu;
-    private int baslamaZamani;
 
-    public void setBaslamaZamani(int baslamaZamani) {
-        this.baslamaZamani = baslamaZamani;
-    }
 
-    public int getBaslamaZamani() {
-        return baslamaZamani;
-    }
+
+    private Timer timerObject;
 
 
     public Proses(int prosesId, int varisZamani, int oncelik, int prosesZamani) {
@@ -92,4 +88,13 @@ public class Proses {
     public void setProsesRenkKodu(String prosesRenkKodu) {
         this.prosesRenkKodu = prosesRenkKodu;
     }
+
+    public Timer getTimerObject() {
+        return timerObject;
+    }
+
+    public void setTimerObject(Timer timerObject) {
+        this.timerObject = timerObject;
+    }
+
 }
