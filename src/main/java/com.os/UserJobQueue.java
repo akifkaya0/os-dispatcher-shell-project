@@ -42,15 +42,15 @@ public class UserJobQueue implements IUserJobQueue {
 
         Queue<Proses> queue = null;
 
-        for (int i = 0 ; i < 3 ; i++){
+        for (int i = 1 ; i < 4 ; i++){
 
-            System.out.println("user job queue " +i+" yazdiriliyor...");
+            System.out.println("\n\nuser job queue " +i+" yazdiriliyor...");
 
-            if(i == 0)
-                queue = userJobQueue1;
             if(i == 1)
-                queue = userJobQueue2;
+                queue = userJobQueue1;
             if(i == 2)
+                queue = userJobQueue2;
+            if(i == 3)
                 queue = userJobQueue3;
 
             for (Proses proses : queue) {
@@ -67,6 +67,16 @@ public class UserJobQueue implements IUserJobQueue {
                 System.out.print(" |  varis zamani : " + proses.getVarisZamani());
 
             }
+
+            System.out.println("");
+
+            for (Proses proses : queue) {
+
+                System.out.print(" |  id          : " + proses.getProsesId());
+
+            }
+
+            System.out.println("\n");
 
         }
 
@@ -133,5 +143,8 @@ public class UserJobQueue implements IUserJobQueue {
         }
 
     }
+
+
+
 
 }

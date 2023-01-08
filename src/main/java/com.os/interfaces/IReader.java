@@ -6,6 +6,6 @@ import java.io.IOException;
 
 public interface IReader {
 
-    public JobDispatchList okuma() throws IOException;
+    public JobDispatchList okuma(String filePath) throws IOException;
 
 }

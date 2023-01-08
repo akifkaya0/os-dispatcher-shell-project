@@ -9,12 +9,12 @@ import java.io.IOException;
 public class TxtReader implements IReader {
 
     // verilen dizindeki txt dosyasını okuyup geriye prosesleri içeren JobDispatchList döner.
-    public JobDispatchList okuma() throws IOException {
+    public JobDispatchList okuma(String filePath) throws IOException {
 
         JobDispatchList jobDispatchList=new JobDispatchList();
 
         // Dosyanın okunması için oluşturulan FileReader nesnesi
-        FileReader fr = new FileReader("D:\\işletim sistemleri 2\\giriş.txt");
+        FileReader fr = new FileReader(filePath);
         String line;
         BufferedReader br = new BufferedReader(fr);
         int sayac=0;

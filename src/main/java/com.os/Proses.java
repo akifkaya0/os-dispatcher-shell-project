@@ -10,6 +10,8 @@ public class Proses {
     private int oncelik;
     private int prosesZamani;
     private String prosesRenkKodu;
+    private boolean prosesAskidaMi;
+    private boolean prosesCalistirildiMi = false;
 
 
 
@@ -29,11 +31,19 @@ public class Proses {
 
         String information = String.format("%.4f", dispatcherTimer) + " sn proses " + printType;
         String processId = "(id:" + String.format("%04d", this.getProsesId());
-        String processOncelik = " öncelik:" + this.getOncelik();
-        String processArrivalTime = " kalan süre:" + this.getProsesZamani() + " sn)";
+        String processOncelik = " oncelik:" + this.getOncelik();
+        String processArrivalTime = " kalan sure:" + this.getProsesZamani() + " sn)";
+        System.out.println(this.prosesRenkKodu + information + processId + processOncelik + processArrivalTime +  "\u001B[0m");
 
+    }
 
-        System.out.format("%s %20s  %10s  %10s  %10s \u001B[0m \n", this.prosesRenkKodu, information, processId, processOncelik, processArrivalTime);
+    public String getPrintText(float dispatcherTimer, String printType){
+
+        String information = String.format("%.4f", dispatcherTimer) + " sn proses " + printType;
+        String processId = "(id:" + String.format("%04d", this.getProsesId());
+        String processOncelik = " oncelik:" + this.getOncelik();
+        String processArrivalTime = " kalan sure:" + this.getProsesZamani() + " sn)";
+        return this.prosesRenkKodu + information + processId + processOncelik + processArrivalTime +  "\u001B[0m \n";
 
     }
 
@@ -97,4 +107,19 @@ public class Proses {
         this.timerObject = timerObject;
     }
 
+    public boolean getProsesAskidaMi() {
+        return prosesAskidaMi;
+    }
+
+    public void setProsesAskidaMi(boolean prosesAskidaMi) {
+        this.prosesAskidaMi = prosesAskidaMi;
+    }
+
+    public boolean getProsesCalistirildiMi() {
+        return prosesCalistirildiMi;
+    }
+
+    public void setProsesCalistirildiMi(boolean prosesCalistirildiMi) {
+        this.prosesCalistirildiMi = prosesCalistirildiMi;
+    }
 }

@@ -76,6 +76,29 @@ public class Dispatcher implements IDispatcher {
 
     }
 
+    public Process prosesBaslat(Proses proses, int seconds) throws IOException {
+
+        String message = proses.getPrintText(seconds ,"basladi");
+        ProcessBuilder processBuilder=new ProcessBuilder("cmd.exe", "/c echo " + message);
+        processBuilder.inheritIO();
+        Process process = processBuilder.start();
+        return process;
+    }
+
+    public void prosesBitir(Proses proses, int seconds){
+
+
+        proses.printProses(seconds, "sonlandi");
+
+    }
+
+    public void prosesZamanAsimi(Proses proses, int seconds){
+
+
+        proses.printProses(seconds, "zaman asimi");
+
+    }
+
     public void calistir() throws InterruptedException, IOException {
 
 
@@ -87,6 +110,8 @@ public class Dispatcher implements IDispatcher {
         Proses islenmisProses = null;
         Proses islenecekProses = null;
         Thread.sleep(100);
+
+        Process realProcess = null;
 
         while (true) {
 
@@ -103,7 +128,7 @@ public class Dispatcher implements IDispatcher {
             if (islenmisProses == null) {
 
                 if (islenecekProses != null)
-                    islenecekProses.printProses(seconds, "basladi");
+                    realProcess = prosesBaslat(islenecekProses , seconds);
 
             } else {
 
@@ -119,11 +144,11 @@ public class Dispatcher implements IDispatcher {
                     if (islenecekProses.getOncelik() <= islenmisProses.getOncelik() && islenmisProses.getProsesZamani() != 0) {
 
                         islenmisProses.printProses(seconds, "askıda");
-                        islenecekProses.printProses(seconds, "basladi");
+                        realProcess = prosesBaslat(islenecekProses , seconds);
 
                     } else {
                         // yeni bir proses başlangıcı belirtmek için
-                        islenecekProses.printProses(seconds, "basladi");
+                        realProcess = prosesBaslat(islenecekProses , seconds);
                     }
                 }
             }
@@ -153,6 +178,7 @@ public class Dispatcher implements IDispatcher {
                         userJobQueue.removeProses(islenmisProses);
 
                     islenmisProses.printProses(seconds, "sonlandi");
+                    realProcess.destroy();
                     continue;
                 }
 

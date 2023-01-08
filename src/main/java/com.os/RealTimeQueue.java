@@ -36,6 +36,14 @@ public class RealTimeQueue implements IRealTimeQueue {
         }
 
         System.out.println("");
+
+        for (Proses proses : realTimeQueue) {
+
+            System.out.print(" |  id           : " + String.format(String.valueOf(proses.getProsesId()) ,3));
+
+        }
+
+        System.out.println("");
         System.out.println("");
 
     }
